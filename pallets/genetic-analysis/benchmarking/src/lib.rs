@@ -38,7 +38,7 @@ pub trait Config:
 pub struct Pallet<T: Config>(GeneticAnalysis<T>);
 
 use frame_benchmarking::{benchmarks, vec};
-use frame_support::sp_runtime::traits::Hash;
+use frame_support::{sp_runtime::{SaturatedConversion, traits::Hash}, traits::Currency};
 use frame_system::RawOrigin;
 use genetic_analysis::Call;
 use sp_core::Decode;
@@ -117,78 +117,86 @@ benchmarks! {
 		"Rejected description".as_bytes().to_vec()
 	)
 
-	process_genetic_analysis {
-		let caller: T::AccountId = T::AccountId::decode(&mut "18c79faa6203d8b8349b19cc72cc6bfd008c243ea998435847abf6618756ca0b".as_bytes()).unwrap();
-		let caller_origin = T::Origin::from(RawOrigin::Signed(caller.clone()));
+	// process_genetic_analysis {
+	// 	let caller: T::AccountId = T::AccountId::decode(&mut "18c79faa6203d8b8349b19cc72cc6bfd008c243ea998435847abf6618756ca0b".as_bytes()).unwrap();
+	// 	let caller_origin = T::Origin::from(RawOrigin::Signed(caller.clone()));
+	// 	let _ = <T as GeneticAnalysisOrdersConfig>::Currency::deposit_creating(&caller, 1000000000000000000000u128.saturated_into());
 
-		let genetic_analyst = GeneticAnalystInfo {
-			box_public_key: T::Hashing::hash("0xDb9Af2d1f3ADD2726A132AA7A65Cc9E6fC5761C3".as_bytes()),
-			first_name: "First Name".as_bytes().to_vec(),
-			last_name: "Last Name".as_bytes().to_vec(),
-			gender: "Gender".as_bytes().to_vec(),
-			date_of_birth: <T as pallet_timestamp::pallet::Config>::Moment::default(),
-			email: "Email".as_bytes().to_vec(),
-			phone_number: "+6893026516".as_bytes().to_vec(),
-			specialization: "DeBio Genetic Analyst".as_bytes().to_vec(),
-			profile_link: "DeBio Genetic Analyst profile_link".as_bytes().to_vec(),
-			profile_image: Some("DeBio Genetic Analyst profile_image".as_bytes().to_vec()),
-		};
-		let _add_genetic_analysts = GeneticAnalysts::<T>::register_genetic_analyst(caller_origin.clone(), genetic_analyst);
+	// 	let genetic_analyst = GeneticAnalystInfo {
+	// 		box_public_key: T::Hashing::hash("0xDb9Af2d1f3ADD2726A132AA7A65Cc9E6fC5761C3".as_bytes()),
+	// 		first_name: "First Name".as_bytes().to_vec(),
+	// 		last_name: "Last Name".as_bytes().to_vec(),
+	// 		gender: "Gender".as_bytes().to_vec(),
+	// 		date_of_birth: <T as pallet_timestamp::pallet::Config>::Moment::default(),
+	// 		email: "Email".as_bytes().to_vec(),
+	// 		phone_number: "+6893026516".as_bytes().to_vec(),
+	// 		specialization: "DeBio Genetic Analyst".as_bytes().to_vec(),
+	// 		profile_link: "DeBio Genetic Analyst profile_link".as_bytes().to_vec(),
+	// 		profile_image: Some("DeBio Genetic Analyst profile_image".as_bytes().to_vec()),
+	// 	};
+	// 	let _add_genetic_analysts = GeneticAnalysts::<T>::register_genetic_analyst(caller_origin.clone(), genetic_analyst);
 
-		let _ = GeneticAnalysts::<T>::update_genetic_analyst_availability_status(caller_origin.clone(), AvailabilityStatus::Available);
+	// 	let _ = GeneticAnalysts::<T>::update_genetic_analyst_availability_status(caller_origin.clone(), AvailabilityStatus::Available);
 
-		let eth_address = <T as UserProfileConfig>::EthereumAddress::default();
-		let _set_eth_address = UserProfile::<T>::set_eth_address(caller_origin.clone(), eth_address);
+	// 	let eth_address = <T as UserProfileConfig>::EthereumAddress::default();
+	// 	let _set_eth_address = UserProfile::<T>::set_eth_address(caller_origin.clone(), eth_address);
 
-		let genetic_analyst_service_info = GeneticAnalystServiceInfo {
-			name: "DeBio Genetic Analyst Service name".as_bytes().to_vec(),
-			prices_by_currency: vec![
-				PriceByCurrency::default()
-			],
-			expected_duration: ExpectedDuration::default(),
-			description: "DeBio Genetic Analyst Service description".as_bytes().to_vec(),
-			test_result_sample: "DeBio Genetic Analyst Service test_result_sample".as_bytes().to_vec(),
-		};
-		let _create_genetic_analyst_service = GeneticAnalystServices::<T>::create_genetic_analyst_service(caller_origin.clone(), genetic_analyst_service_info);
+	// 	let genetic_analyst_service_info = GeneticAnalystServiceInfo {
+	// 		name: "DeBio Genetic Analyst Service name".as_bytes().to_vec(),
+	// 		prices_by_currency: vec![
+	// 			PriceByCurrency::default()
+	// 		],
+	// 		expected_duration: ExpectedDuration::default(),
+	// 		description: "DeBio Genetic Analyst Service description".as_bytes().to_vec(),
+	// 		test_result_sample: "DeBio Genetic Analyst Service test_result_sample".as_bytes().to_vec(),
+	// 	};
+	// 	let _create_genetic_analyst_service = GeneticAnalystServices::<T>::create_genetic_analyst_service(caller_origin.clone(), genetic_analyst_service_info);
 
-		let _genetic_analyst = GeneticAnalysts::<T>::genetic_analyst_by_account_id(caller.clone())
-			.unwrap();
+	// 	let _genetic_analyst = GeneticAnalysts::<T>::genetic_analyst_by_account_id(caller.clone())
+	// 		.unwrap();
 
-		let _add_genetic_data = GeneticData::<T>::add_genetic_data(
-			caller_origin.clone(),
-			"DeBio Genetic Data".as_bytes().to_vec(),
-			"DeBio Genetic Data Document Description".as_bytes().to_vec(),
-			"DeBio Genetic Data Link".as_bytes().to_vec()
-		);
+	// 	let _add_genetic_data = GeneticData::<T>::add_genetic_data(
+	// 		caller_origin.clone(),
+	// 		"DeBio Genetic Data".as_bytes().to_vec(),
+	// 		"DeBio Genetic Data Document Description".as_bytes().to_vec(),
+	// 		"DeBio Genetic Data Link".as_bytes().to_vec()
+	// 	);
 
-		let _genetic_data_ids = GeneticData::<T>::genetic_data_by_owner_id(
-			caller.clone()
-		).unwrap();
+	// 	let _genetic_data_ids = GeneticData::<T>::genetic_data_by_owner_id(
+	// 		caller.clone()
+	// 	).unwrap();
 
-		let _create_genetic_analysis_order = GeneticAnalysisOrders::<T>::create_genetic_analysis_order(
-			caller_origin,
-			_genetic_data_ids[0],
-			_genetic_analyst.services[0],
-			0,
-			T::Hashing::hash("0xhJ7TRe456FADD2726A132ABJK5RCc9E6fC5869F4".as_bytes()),
-			"DeBio Genetic Genetic Link".as_bytes().to_vec(),
-			None,
-		);
+	// 	let _create_genetic_analysis_order = GeneticAnalysisOrders::<T>::create_genetic_analysis_order(
+	// 		caller_origin.clone(),
+	// 		_genetic_data_ids[0],
+	// 		_genetic_analyst.services[0],
+	// 		0,
+	// 		T::Hashing::hash("0xhJ7TRe456FADD2726A132ABJK5RCc9E6fC5869F4".as_bytes()),
+	// 		"DeBio Genetic Genetic Link".as_bytes().to_vec(),
+	// 		None,
+	// 	);
 
-		let _genetic_analysis_order_id_list = GeneticAnalysisOrders::<T>::genetic_analysis_orders_by_genetic_analyst_id(caller.clone())
-			.unwrap();
-		let _genetic_analysis_order = GeneticAnalysisOrders::<T>::genetic_analysis_order_by_id(_genetic_analysis_order_id_list[0])
-			.unwrap();
-	}: process_genetic_analysis(
-		RawOrigin::Signed(caller),
-		_genetic_analysis_order.genetic_analysis_tracking_id,
-		GeneticAnalysisStatus::default()
-	)
+	// 	let _genetic_analysis_order_id_list = GeneticAnalysisOrders::<T>::genetic_analysis_orders_by_genetic_analyst_id(caller.clone())
+	// 		.unwrap();
+	// 	let _genetic_analysis_order = GeneticAnalysisOrders::<T>::genetic_analysis_order_by_id(_genetic_analysis_order_id_list[0])
+	// 		.unwrap();
+
+	// 	let _ = GeneticAnalysisOrders::<T>::set_genetic_analysis_order_paid(
+	// 		caller_origin.clone(),
+	// 		_genetic_analysis_order.id,
+	// 	);
+	// }: process_genetic_analysis(
+	// 	RawOrigin::Signed(caller),
+	// 	_genetic_analysis_order.genetic_analysis_tracking_id,
+	// 	GeneticAnalysisStatus::ResultReady
+	// )
 
 	submit_genetic_analysis {
 		let caller: T::AccountId = T::AccountId::decode(&mut "18c79faa6203d8b8349b19cc72cc6bfd008c243ea998435847abf6618756ca0b".as_bytes()).unwrap();
 		let caller_origin = T::Origin::from(RawOrigin::Signed(caller.clone()));
 
+		let _ = <T as GeneticAnalysisOrdersConfig>::Currency::deposit_creating(&caller, 1000000000000000000000u128.saturated_into());
+
 		let genetic_analyst = GeneticAnalystInfo {
 			box_public_key: T::Hashing::hash("0xDb9Af2d1f3ADD2726A132AA7A65Cc9E6fC5761C3".as_bytes()),
 			first_name: "First Name".as_bytes().to_vec(),
@@ -234,7 +242,7 @@ benchmarks! {
 		).unwrap();
 
 		let _create_genetic_analysis_order = GeneticAnalysisOrders::<T>::create_genetic_analysis_order(
-			caller_origin,
+			caller_origin.clone(),
 			_genetic_data_ids[0],
 			_genetic_analyst.services[0],
 			0,
@@ -245,6 +253,10 @@ benchmarks! {
 
 		let _genetic_analysis_order_id_list = GeneticAnalysisOrders::<T>::genetic_analysis_orders_by_genetic_analyst_id(caller.clone())
 			.unwrap();
+		let _ = GeneticAnalysisOrders::<T>::set_genetic_analysis_order_paid(
+			caller_origin.clone(),
+			_genetic_analysis_order_id_list[0],
+		);
 		let _genetic_analysis_order = GeneticAnalysisOrders::<T>::genetic_analysis_order_by_id(_genetic_analysis_order_id_list[0])
 			.unwrap();
 	}: submit_genetic_analysis(

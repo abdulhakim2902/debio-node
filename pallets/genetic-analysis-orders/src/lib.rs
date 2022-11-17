@@ -312,6 +312,7 @@ pub mod pallet {
 				&genetic_analysis_order_id,
 			) {
 				Ok(genetic_analysis_order) => {
+					log::info!("{:?}", genetic_analysis_order);
 					Self::deposit_event(Event::<T>::GeneticAnalysisOrderPaid(
 						genetic_analysis_order,
 					));
